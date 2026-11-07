@@ -1,0 +1,30 @@
+{
+  "description": "Builds a Copperscript plugin crate from the data folder into the behavior pack, and adds its native script module to the manifest.",
+  "filters": [
+    {
+      "runWith": "exe",
+      "exe": "bin/windows-x86_64/copperscript.exe",
+      "when": "os == 'windows' && arch == 'amd64'"
+    },
+    {
+      "runWith": "exe",
+      "exe": "bin/macos-aarch64/copperscript",
+      "when": "os == 'darwin' && arch == 'arm64'"
+    },
+    {
+      "runWith": "exe",
+      "exe": "bin/macos-x86_64/copperscript",
+      "when": "os == 'darwin' && arch == 'amd64'"
+    },
+    {
+      "runWith": "exe",
+      "exe": "bin/linux-x86_64/copperscript",
+      "when": "os == 'linux' && arch == 'amd64'"
+    },
+    {
+      "runWith": "shell",
+      "command": "echo 'copperscript: there is no prebuilt binary for this platform. Supported platforms: windows-x86_64, macos-aarch64, macos-x86_64, linux-x86_64.'; exit 1 #",
+      "when": "!(os == 'windows' && arch == 'amd64' || os == 'darwin' && arch == 'arm64' || os == 'darwin' && arch == 'amd64' || os == 'linux' && arch == 'amd64')"
+    }
+  ]
+}
