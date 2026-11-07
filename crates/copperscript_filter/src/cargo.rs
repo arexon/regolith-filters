@@ -23,13 +23,22 @@ pub struct Plugin {
     pub modules: Vec<ScriptModule>,
 }
 
-fn cargo() -> Command {
-    Command::new(std::env::var_os("CARGO").unwrap_or_else(|| "cargo".into()))
+/// A cargo command for the crate at `manifest`, run from the crate's folder.
+///
+/// Cargo and rustup find `.cargo/config.toml` and `rust-toolchain.toml` from the working directory.
+/// Regolith's, `.regolith/tmp`, would hide those in the crate's folder, such as the Windows linker
+/// a crate sets for cross builds.
+fn cargo(manifest: &Path) -> Command {
+    let mut command = Command::new(std::env::var_os("CARGO").unwrap_or_else(|| "cargo".into()));
+    if let Some(dir) = manifest.parent() {
+        command.current_dir(dir);
+    }
+    command
 }
 
 /// Runs `cargo metadata` on the plugin crate.
 pub fn metadata(manifest: &Path) -> Result<Plugin> {
-    let output = cargo()
+    let output = cargo(manifest)
         .args([
             "metadata",
             "--quiet",
@@ -142,7 +151,7 @@ pub fn build(
     profile_args: &[String],
     target_dir: Option<&Path>,
 ) -> Result<PathBuf> {
-    let mut command = cargo();
+    let mut command = cargo(manifest);
     command
         .args(["build", "--quiet", "--manifest-path"])
         .arg(manifest)

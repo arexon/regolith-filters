@@ -29,7 +29,9 @@ fn run() -> Result<()> {
     // Build the original crate. Relative paths in the copy under `.regolith/tmp` would break, and
     // the copy would rebuild from scratch every time.
     let data_dir = project::data_dir(&root)?;
-    let crate_dir = data_dir.join(&settings.crate_dir);
+    // Absolute, because cargo runs from the crate's folder.
+    let crate_dir = std::path::absolute(data_dir.join(&settings.crate_dir))
+        .context("cannot resolve the crate's folder")?;
     let cargo_toml = crate_dir.join("Cargo.toml");
     if !cargo_toml.is_file() {
         bail!(
