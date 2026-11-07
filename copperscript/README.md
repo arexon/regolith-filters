@@ -3,7 +3,7 @@
 Builds a [Copperscript](https://github.com/arexon/copperscript) plugin into the behavior pack, and adds its native script module and dependencies to the manifest.
 
 ```sh
-regolith install github.com/arexon/regolith-filters/copperscript==0.1.0
+regolith install github.com/arexon/regolith-filters/copperscript==latest
 ```
 
 Put the plugin crate in `packs/data/copperscript`, and write `packs/BP/manifest.json` without a script module.
